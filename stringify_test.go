@@ -2,7 +2,6 @@ package stringify_test
 
 import (
 	"encoding/json"
-	"fmt"
 	"testing"
 	"time"
 
@@ -41,7 +40,7 @@ func TestToString(t *testing.T) {
 	m := make(map[string]int)
 	m["g"] = 5
 	a := A{first: 4}
-	bts := []byte("ahafffad")
+	bts := []byte("some text")
 	b := B{
 		First:  1,
 		first:  2,
@@ -49,10 +48,10 @@ func TestToString(t *testing.T) {
 		m:      m,
 		ptr:    &a,
 		intrfc: &a,
-		// fnc:    a.Read,
-		bts: bts,
-		tm:  time.Now(),
-		uid: uuid.New(),
+		fnc:    a.Read,
+		bts:    bts,
+		tm:     time.Now(),
+		uid:    uuid.New(),
 	}
 	jsn, err := json.Marshal(b)
 	if err != nil {
@@ -60,10 +59,9 @@ func TestToString(t *testing.T) {
 	}
 	b.jsn = jsn
 
-	result := stringify.ToString(b)
+	result := stringify.Parse(b)
 	ok := json.Valid([]byte(result))
 	if !ok {
 		t.Fatal("result string not a valid json", result)
 	}
-	fmt.Println("string:", stringify.ToString(b))
 }

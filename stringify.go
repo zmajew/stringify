@@ -13,8 +13,8 @@ var Options map[string]OptionFunction
 
 type any interface{}
 
-// ToString stringifies anything under the interface it accepts.
-func ToString(obj any) string {
+// Parse stringifies anything under the interface it accepts.
+func Parse(obj any) string {
 	response := ""
 	t := reflect.TypeOf(obj)
 	val := reflect.ValueOf(obj)
@@ -49,9 +49,9 @@ func parseStruct(val reflect.Value) string {
 		}
 		response = response + `"` + val.Type().Field(i).Name + `"`
 		if val.Type().Field(i).IsExported() {
-			response = response + ": " + ToString(val.Field(i).Interface())
+			response = response + ": " + Parse(val.Field(i).Interface())
 		} else {
-			response = response + ": " + ToString(getUnexportedField(val, i))
+			response = response + ": " + Parse(getUnexportedField(val, i))
 		}
 	}
 	return response + "}"
@@ -65,9 +65,9 @@ func parseSlice(val reflect.Value) string {
 	for i := 0; i < val.Len(); i++ {
 		v := val.Index(i)
 		if i == 0 {
-			response = response + ToString(v.Interface())
+			response = response + Parse(v.Interface())
 		} else {
-			response = response + ", " + ToString(v.Interface())
+			response = response + ", " + Parse(v.Interface())
 		}
 	}
 	return response + "]"
@@ -81,9 +81,9 @@ func parseMap(val reflect.Value) string {
 	for i, e := range val.MapKeys() {
 		v := val.MapIndex(e)
 		if i == 0 {
-			response = response + ToString(e.Interface()) + ":" + ToString(v.Interface())
+			response = response + Parse(e.Interface()) + ":" + Parse(v.Interface())
 		} else {
-			response = response + ", " + ToString(e.Interface()) + ": " + ToString(v.Interface())
+			response = response + ", " + Parse(e.Interface()) + ": " + Parse(v.Interface())
 		}
 	}
 	return response + "}"
@@ -93,7 +93,7 @@ func parsePointer(val reflect.Value) string {
 	if val.IsNil() {
 		return "nil"
 	}
-	return ToString(val.Elem().Interface())
+	return Parse(val.Elem().Interface())
 }
 
 func parseFunc(val reflect.Value) string {
