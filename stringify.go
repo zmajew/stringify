@@ -7,6 +7,10 @@ import (
 	"unsafe"
 )
 
+type OptionFunction func(interface{}) string
+
+var Options map[string]OptionFunction
+
 type any interface{}
 
 // ToString stringifies anything under the interface it accepts.
@@ -14,6 +18,10 @@ func ToString(obj any) string {
 	response := ""
 	t := reflect.TypeOf(obj)
 	val := reflect.ValueOf(obj)
+	def, ok := Options[t.String()]
+	if ok {
+		return def(val.Interface())
+	}
 	switch t.Kind() {
 	case reflect.Struct:
 		response = response + parseStruct(val)
