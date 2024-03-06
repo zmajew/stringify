@@ -77,7 +77,7 @@ func parseMap(val reflect.Value) string {
 	if val.IsNil() {
 		return "nil"
 	}
-	response := "["
+	response := "{"
 	for i, e := range val.MapKeys() {
 		v := val.MapIndex(e)
 		if i == 0 {
@@ -86,7 +86,7 @@ func parseMap(val reflect.Value) string {
 			response = response + ", " + ToString(e.Interface()) + ": " + ToString(v.Interface())
 		}
 	}
-	return response + "]"
+	return response + "}"
 }
 
 func parsePointer(val reflect.Value) string {

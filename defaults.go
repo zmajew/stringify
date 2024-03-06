@@ -18,16 +18,16 @@ var (
 		}
 		return string(j)
 	}
-	defaultTimeParser  OptionFunction = func(v interface{}) string { return v.(time.Time).Format(time.RFC3339) }
-	defaultUUIDParser  OptionFunction = func(v interface{}) string { return v.(uuid.UUID).String() }
+	defaultTimeParser  OptionFunction = func(v interface{}) string { return `"` + v.(time.Time).Format(time.RFC3339) + `"` }
+	defaultUUIDParser  OptionFunction = func(v interface{}) string { return `"` + v.(uuid.UUID).String() + `"` }
 	defaultBytesParser OptionFunction = func(v interface{}) string {
 		b, _ := v.([]uint8)
 		bl := len(b)
 		if bl >= maxByteLen {
-			return fmt.Sprintf("<[]byte len %d>", bl)
+			return `"` + fmt.Sprintf("<[]byte len %d>", bl) + `"`
 		}
 
-		return fmt.Sprintf("0x%x", v)
+		return `"` + fmt.Sprintf("0x%x", v) + `"`
 	}
 )
 

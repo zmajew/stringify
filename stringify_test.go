@@ -49,16 +49,21 @@ func TestToString(t *testing.T) {
 		m:      m,
 		ptr:    &a,
 		intrfc: &a,
-		fnc:    a.Read,
-		bts:    bts,
-		tm:     time.Now(),
-		// uid:    uuid.New(),
+		// fnc:    a.Read,
+		bts: bts,
+		tm:  time.Now(),
+		uid: uuid.New(),
 	}
-	// jsn, err := json.Marshal(b)
-	// if err != nil {
-	// 	t.Fatal(err)
-	// }
-	// fmt.Println("---fffaa", string(jsn))
-	// b.jsn = jsn
+	jsn, err := json.Marshal(b)
+	if err != nil {
+		t.Fatal(err)
+	}
+	b.jsn = jsn
+
+	result := stringify.ToString(b)
+	ok := json.Valid([]byte(result))
+	if !ok {
+		t.Fatal("result string not a valid json", result)
+	}
 	fmt.Println("string:", stringify.ToString(b))
 }
