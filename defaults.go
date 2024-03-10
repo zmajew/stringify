@@ -10,17 +10,17 @@ import (
 
 // Setup defaults functionality for most common types
 var (
-	maxByteLen        int            = 1000
-	defaultJsonParser OptionFunction = func(v interface{}) string {
+	maxByteLen        int            = 10000
+	defaultJsonParser OptionFunction = func(v any) string {
 		j, _ := v.(json.RawMessage)
 		if j == nil {
 			return "nil"
 		}
 		return string(j)
 	}
-	defaultTimeParser  OptionFunction = func(v interface{}) string { return `"` + v.(time.Time).Format(time.RFC3339) + `"` }
-	defaultUUIDParser  OptionFunction = func(v interface{}) string { return `"` + v.(uuid.UUID).String() + `"` }
-	defaultBytesParser OptionFunction = func(v interface{}) string {
+	defaultTimeParser  OptionFunction = func(v any) string { return `"` + v.(time.Time).Format(time.RFC3339) + `"` }
+	defaultUUIDParser  OptionFunction = func(v any) string { return `"` + v.(uuid.UUID).String() + `"` }
+	defaultBytesParser OptionFunction = func(v any) string {
 		b, _ := v.([]uint8)
 		bl := len(b)
 		if bl >= maxByteLen {

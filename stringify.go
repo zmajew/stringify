@@ -7,13 +7,15 @@ import (
 	"unsafe"
 )
 
-type OptionFunction func(interface{}) string
+// OptionFunction defines how to stringify certain types.
+type OptionFunction func(any) string
 
+// Options map contains OptionFunctions with the reflect.TypeOf.String() string keys.
 var Options map[string]OptionFunction
 
 type any interface{}
 
-// Parse stringifies anything under the interface it accepts.
+// Parse stringifies anything under the interface.
 func Parse(obj any) string {
 	response := ""
 	t := reflect.TypeOf(obj)
@@ -59,7 +61,7 @@ func parseStruct(val reflect.Value) string {
 
 func parseSlice(val reflect.Value) string {
 	if val.IsNil() {
-		return "nil"
+		return "null"
 	}
 	response := "["
 	for i := 0; i < val.Len(); i++ {
